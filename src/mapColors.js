@@ -1,18 +1,3 @@
-const RGBtoHSL = (component) => {
-  const normalR = component.red / 255;
-  const normalG = component.green / 255;
-  const normalB = component.blue / 255;
-  const max = Math.max(normalR, normalG, normalB);
-  const min = Math.min(normalR, normalG, normalB);
-  const diff = max - min;
-
-  const L = (max + min) / 2;
-  const S = diff / (1 - Math.abs(2 * L - 1));
-  const H = (diff === 0 ? 0 : max === normalR ? ((normalG - normalB) / diff) % 6 : max === normalG ? ((normalB - normalR)/diff + 2) : ((normalR - normalG) / diff) + 4) * 60;
-
-  return {H, S, L};
-};
-
 const getImageData = (totalEmojis) => {
   const entireData = [];
   // Canvas has a max side length of 32,767 pixels (width and height).

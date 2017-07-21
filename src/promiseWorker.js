@@ -27,7 +27,9 @@ export default (actions) => {
     const actions = {
       build: (self, data) => {
         Object.assign(actions, Object.keys(data).reduce((newData, key) => {
+          /*eslint-disable no-eval*/
           newData[key] = eval(`(${data[key]})`);
+          /*eslint-enable no-eval*/
           return newData;
         }, {}));
         (actions.init || (() => {}))(self, context);

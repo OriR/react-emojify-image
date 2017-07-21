@@ -1,14 +1,14 @@
 {
   "name": "react-emojify-image",
+  "description": "pixelating an image, with emojis",
   "version": "0.0.1",
-  "homepage": "http://orir.github.io/react-emojify",
-  "dependencies": {
-    "react": "^15.6.1",
-    "prop-types": "^15.5.10",
-    "react-dom": "^15.6.1",
-    "react-scripts": "1.0.10"
-  },
+  "main": "dist/index.js",
+  "homepage": "http://orir.github.io/react-emojify-image",
+  "license": "MIT",
+  "keywords": ["react", "emoji", "emojify", "image", "photo"],
   "scripts": {
+    "compile": "NODE_ENV=production babel -d lib/ src/ --presets react-app",
+    "prepublish": "npm run compile",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -16,7 +16,14 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "dependencies": {
+    "react": "^15.6.1",
+    "prop-types": "^15.5.10",
+    "react-dom": "^15.6.1",
+    "react-scripts": "1.0.10"
+  },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "gh-pages": "^1.0.0"
   }
 }
