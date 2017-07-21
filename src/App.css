@@ -1,0 +1,16 @@
+.App {
+  text-align: center;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.input-container {
+  display: flex;
+  width: 40%;
+  justify-content: space-between;
+}
+
+.scale-container {
+  display: flex;
+}
