@@ -11,12 +11,12 @@ export default class EmojifyImageCustom extends Component {
 
   _remap(emojis) {
     mapColors(emojis).then(mapping => {
-      this.setState({mapping, isMappingEmojis: false});
+      this.setState({mapping, isLoading: false});
     });
   }
 
   _redraw(props) {
-    if (!this.canvas) return;
+    if (!this.canvas || this.state.isLoading || this.state.justLoaded) return;
 
     const context = this.canvas.getContext('2d');
 
@@ -26,14 +26,14 @@ export default class EmojifyImageCustom extends Component {
     const imageData = context.getImageData(0, 0, this.canvas.width, this.canvas.height);
     context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.setState({isDrawing: true});
+    this.setState({isLoading: true, justLoaded: false});
 
     emojify(this.state.mapping, props.scale, imageData).then((emojifiedData) => {
       context.font = `${props.scale * 1.3}px sans-serif`;
       emojifiedData.forEach(emojiData => {
         context.fillText(emojiData.emoji, emojiData.x, emojiData.y);
       });
-      this.setState({isDrawing: false});
+      this.setState({isLoading: false, justLoaded: true});
     });
   }
 
@@ -44,7 +44,8 @@ export default class EmojifyImageCustom extends Component {
     super(props);
 
     this.state = {
-      isMappingEmojis: true
+      isLoading: true,
+      justLoaded: false
     };
 
     this._remap(props.emojis);
@@ -54,17 +55,11 @@ export default class EmojifyImageCustom extends Component {
     const shouldMapEmojis = nextProps.emojis !== this.props.emojis || nextProps.emojis.length !== this.props.emojis.length;
 
     if (shouldMapEmojis) {
-      this.setState({isMappingEmojis: true});
+      this.setState({ isLoading: true });
       this._remap(nextProps.emojis);
     }
-  }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const shouldMapEmojis = nextProps.emojis !== this.props.emojis || nextProps.emojis.length !== this.props.emojis.length;
-    const hasNewProps = nextProps.scale !== this.props.scale || nextProps.image !== this.props.image;
-    const hasMappedEmojis = nextState.isMappingEmojis !== this.state.isMappingEmojis && nextState.isMappingEmojis === false;
-
-    return shouldMapEmojis || hasNewProps || hasMappedEmojis;
+    this.setState({ justLoaded: nextProps.scale === this.props.scale && nextProps.image === this.props.image });
   }
 
   componentDidUpdate() {
@@ -79,7 +74,7 @@ export default class EmojifyImageCustom extends Component {
     const Loader = this.props.loader;
     return (
       <div style={{display: 'flex', flexFlow: 'column'}}>
-        { (this.state.isDrawing || this.state.isMappingEmojis) ? <Loader /> : null }
+        { this.state.isLoading ? <Loader /> : null }
         <canvas style={{width: this.props.image.width, height: this.props.image.height}} ref={r => (this.canvas = r)}/>
       </div>
     );

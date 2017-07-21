@@ -14,15 +14,13 @@ const worker = promiseWorker({
       },
       execute: function (self, data, context) {
         const emojis = data.args[0];
-        this.map(emojis,
-          (emojis) => new Promise(resolve => {
-            const id = context.id;
-            context.id++;
-            context.resolvers[id] = resolve;
-            self.postMessage({ action: 'getImageData', data: { id, emojis } });
-          })
-        ).then(mapping => {
-          self.postMessage({ action: 'done', data: { id: data.id, mapping } });
+        return new Promise(resolve => {
+          const id = context.id;
+          context.id++;
+          context.resolvers[id] = resolve;
+          self.postMessage({ action: 'getImageData', data: { id, emojis } });
+        }).then(imageData => {
+          self.postMessage({ action: 'done', data: { id: data.id, mapping: this.map(imageData) }});
         });
       }
     },
