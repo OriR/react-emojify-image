@@ -1,11 +1,17 @@
 {
   "name": "react-emojify-image",
   "description": "pixelating an image, with emojis",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/index.js",
   "homepage": "http://orir.github.io/react-emojify-image",
   "license": "MIT",
-  "keywords": ["react", "emoji", "emojify", "image", "photo"],
+  "keywords": [
+    "react",
+    "emoji",
+    "emojify",
+    "image",
+    "photo"
+  ],
   "scripts": {
     "compile": "NODE_ENV=production babel -d lib/ src/ --presets react-app",
     "prepublish": "npm run compile",
